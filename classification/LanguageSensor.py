@@ -22,7 +22,7 @@
 # ----------------------------------------------------------------------
 import numpy
 
-from fluent.utils.text_preprocess import TextPreprocess
+#from fluent.utils.text_preprocess import TextPreprocess
 from nupic.regions.PyRegion import PyRegion
 
 
