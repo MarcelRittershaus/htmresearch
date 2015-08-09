@@ -104,15 +104,6 @@ class SequenceClassifierRegion(PyRegion):
             defaultValue=0,
             accessMode='ReadWrite'),
 
-          steps=dict(
-            description='Comma separated list of the desired steps of '
-                        'prediction that the classifier should learn',
-            dataType="Byte",
-            count=0,
-            constraints='',
-            defaultValue='1',
-            accessMode='Create'),
-
           alpha=dict(
             description='The alpha used to compute running averages of the '
                'bucket duty cycles for each activation pattern bit. A lower '
@@ -128,7 +119,7 @@ class SequenceClassifierRegion(PyRegion):
             accessMode='ReadWrite',
             dataType='Byte',
             count=0,
-            constraints='enum: py, cpp'),
+            constraints='enum: py'),
 
            clVerbosity=dict(
             description='An integer that controls the verbosity level, '
@@ -148,21 +139,16 @@ class SequenceClassifierRegion(PyRegion):
 
 
   def __init__(self,
-               steps='1',
                alpha=0.001,
                clVerbosity=0,
                implementation=None,
                ):
 
-    # Convert the steps designation to a list
-    self.steps = steps
-    self.stepsList = eval("[%s]" % (steps))
     self.alpha = alpha
     self.verbosity = clVerbosity
 
     # Initialize internal structures
     self._classifier = SequenceClassifierFactory.create(
-        steps=self.stepsList,
         alpha=self.alpha,
         verbosity=self.verbosity,
         implementation=implementation,
@@ -242,7 +228,7 @@ class SequenceClassifierRegion(PyRegion):
     clResults = self._classifier.compute(
         recordNum=self.recordNum, patternNZ=patternNZ, classification=classificationIn, learn=self.learningMode, infer=self.inferenceMode)
 
-    inferredValue = clResults["actualValues"][clResults[int(self.steps)].argmax()]
+    inferredValue = clResults["actualValues"][clResults["probabilities"].argmax()]
 
     outputs['classificationResult'][0] = inferredValue
     

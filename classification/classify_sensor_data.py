@@ -55,8 +55,7 @@ _CATEGORY_ENCODER_PARAMS = {
     "categoryList": range(NUM_CATEGORIES)
 }
 
-_CLA_CLASSIFIER_PARAMS = {"steps": "1",
-                         "implementation": "py", "clVerbosity": _VERBOSITY}
+_CLA_CLASSIFIER_PARAMS = {"implementation": "py", "clVerbosity": _VERBOSITY}
 
 _KNN_CLASSIFIER_PARAMS = {
   "k": 1,
