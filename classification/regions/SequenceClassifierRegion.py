@@ -246,10 +246,13 @@ class SequenceClassifierRegion(PyRegion):
     # List the indices of active cells (non-zero pattern)
     if self.classifyPredictedActiveCells:
       predictedActiveCells = inputs["predictedActiveCells"]      
-      patternNZ = predictedActiveCells.nonzero()[0]
+      patternNZPredictedActive = predictedActiveCells.nonzero()[0]
     else:
       activeCells = inputs["bottomUpIn"]
-      patternNZ = activeCells.nonzero()[0]
+      patternNZActive = activeCells.nonzero()[0]
+
+    #patterNZ = alpha * patternNZPredictedActive + beta * patternNZActive
+    patternNZ = patternNZActive
 
     # Call classifier
     clResults = self._classifier.compute(
