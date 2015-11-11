@@ -21,7 +21,8 @@
 
 import pandas as pd
 import numpy as np
-from param_finder import get_suggested_timescale_and_encoder
+from htmresearch.frameworks.utils.param_finder import \
+  get_suggested_timescale_and_encoder
 from runDataAggregationExperiment import readCSVfiles
 from os.path import join
 import matplotlib as mpl
