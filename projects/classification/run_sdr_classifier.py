@@ -47,7 +47,7 @@ def initializeEncoder(Nelements, seed):
 
 
 def initializeClassifiers(Nelements, encoder):
-  claClassiiier = CLAClassifier(steps=[0])
+  claClassifier = CLAClassifier(steps=[0])
 
   sdrClassifier = SDRClassifier(steps=[0], alpha=0.1)
 
@@ -55,11 +55,11 @@ def initializeClassifiers(Nelements, encoder):
   classification = {'bucketIdx': Nelements-1, 'actValue': Nelements-1}
 
   # feed in the pattern with the highest bucket index
-  claRetval = claClassiiier.compute(0, patternNZ, classification,
+  claRetval = claClassifier.compute(0, patternNZ, classification,
                            learn=True, infer=True)
   sdrRetval = sdrClassifier.compute(0, patternNZ, classification,
                                     learn=True, infer=True)
-  return claClassiiier, sdrClassifier
+  return claClassifier, sdrClassifier
 
 
 
