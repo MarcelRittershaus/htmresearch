@@ -63,14 +63,19 @@ class ReversedExtendedTemporalMemory(FastETM):
     """
     # sort indices for consistency with C++ version
     activeColumns = sorted(list(activeColumns))
-    activeExternalCells = sorted(list(activeExternalCells))
-    activeApicalCells = sorted(list(activeApicalCells))
 
-    self.activateBasalDendrites(
+    if activeExternalCells is not None:
+      activeExternalCells = sorted(list(activeExternalCells))
+    else:
+      activeExternalCells = []
+
+    if activeApicalCells is not None:
+      activeApicalCells = sorted(list(activeApicalCells))
+    else:
+      activeApicalCells = []
+
+    self.activateDendrites(
       activeExternalCells,
-      learn
-    )
-    self.activateApicalDendrites(
       activeApicalCells,
       learn
     )
@@ -81,6 +86,16 @@ class ReversedExtendedTemporalMemory(FastETM):
       learn
     )
 
+  def getPredictedActiveCells(self):
+    """
+    Returns the correctly predicted cells.
+
+    This implementation returns a list of the intersection of currently
+    predictive (not previously predicted) and currently active cells.  This is
+    only valid when external and proximal inputs are used in the same time
+    step.
+    """
+    return list(set(self.getPredictiveCells()) & set(self.getActiveCells()))
 
 
 class TemporalMemoryTypes(object):
