@@ -42,20 +42,25 @@ def percentOverlap(x1, x2):
 def clusterDist2(c1, c2, numCells):
   if len(c1) == 0 or len(c2) == 0:
     return 0
-  
+
   c1Sum = np.sum([convertNonZeroToSDR(sdr, numCells) for sdr in c1],
                  axis=0)
- 
+
   c2Sum = np.sum([convertNonZeroToSDR(sdr, numCells) for sdr in c2],
                  axis=0)
 
-  return sumSDRDist(c1Sum, c2Sum)
+  #return normalized_euclidian(c1Sum, c2Sum)
+  return euclidian(c1Sum / float(len(c1)), c2Sum / float(len(c2)))
 
 
+def euclidian(x1, x2):
+  return np.linalg.norm(np.array(x1) - np.array(x2))
 
-def sumSDRDist(sumSDR1, sumSDR2):
-  return np.linalg.norm(sumSDR1 / float(len(sumSDR1)) 
-                        - sumSDR2 / float(len(sumSDR2)))
+
+def normalized_euclidian(x1, x2):
+  # return np.linalg.norm(np.array(x1) - np.array(x2))
+  return np.linalg.norm(
+    np.array(x1) / float(len(x1)) - np.array(x2) / float(len(x2)))
 
 
 
@@ -94,7 +99,7 @@ def clusterDistDirected(c1, c2):
       # ignore SDRs with zero active bits
       if np.sum(sdr1) == 0:
         continue
-      
+
       d = []
       for sdr2 in c2:
         d.append(1 - percentOverlap(sdr1, sdr2))

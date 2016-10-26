@@ -38,10 +38,10 @@ def plotSensorData(inpuFilePaths, markers=True, categoryLabels=None):
   Plot several sensor data CSV recordings and highlights the sequences.
   """
 
-  categoryColors = ['grey', 'blue', 'yellow', 'red', 'green', 'orange',
-                    'pink', 'purple']
   plt.figure()
 
+  categoryColors = ['grey', 'blue', 'yellow', 'red', 'green', 'orange',
+                    'pink', 'purple']
   for inpuFilePath in inpuFilePaths:
 
     timesteps = []

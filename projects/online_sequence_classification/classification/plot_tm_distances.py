@@ -78,11 +78,11 @@ if __name__ == "__main__":
   numSteps = len(traces['recordNumber'])
   pointsToPlot = numSteps / 10
   numClasses = len(set(traces['actualCategory']))
-  vizInterCategoryClusters(traces,
-                           outputDir,
-                           cellsType,
-                           numCells,
-                           pointsToPlot)
+  # vizInterCategoryClusters(traces,
+  #                          outputDir,
+  #                          cellsType,
+  #                          numCells,
+  #                          pointsToPlot)
 
   vizInterSequenceClusters(traces, outputDir, cellsType, numCells,
                            numClasses)

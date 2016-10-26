@@ -24,29 +24,27 @@ import csv
 import json
 import sys
 import numpy as np
-import os
+
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
 
-
-def constructStableIntervals(confidence):
-  """
-  stableIndices = [31, 32, 34, 38, 39, 40]
-   
-  stableIndicesDiff = [1, 2, 4, 1, 1]
-   
-  consecutiveStableIndices = [0, 3, 4]  
-  
-  stableIntervals = [(0,1), (3,4)]
-  
-  """
-
-  stableIndices = np.where(np.array(confidence) > 0)[0]
-  stableIndicesDiff = np.diff(stableIndices)
-  consecutiveStableIndices = np.where(stableIndicesDiff == 1)
-
+def convertAnomalyScore(anomalyScore,
+                        anomalyScoreThreshold,
+                        anomalyScoreProbationaryPeriod):
+  convertedAnomalyScore = []
+  count = 0
+  for a in anomalyScore:
+    if a > anomalyScoreThreshold:
+      count +=1
+    else:
+      count = 0
+    if count > anomalyScoreProbationaryPeriod:
+      convertedAnomalyScore.append(1.0)
+    else:
+      convertedAnomalyScore.append(0.0)
+  return convertedAnomalyScore
 
 
 def plotTraces(xlim, traces, title, anomalyScoreType,
@@ -99,35 +97,27 @@ def plotTraces(xlim, traces, title, anomalyScoreType,
     xStartLabel += width
   ax[0].set_ylabel('Sensor Value')
 
+  # plot anomaly score
+  ax[1].set_title(anomalyScoreType)
+  ax[1].plot(traces[anomalyScoreType])
+
   # plot classification accuracy
-  ax[1].set_title('Classification accuracy rolling average')
-  ax[1].plot(traces['rollingClassificationAccuracy'])
+  ax[2].set_title('Classification accuracy rolling average')
+  ax[2].plot(traces['rollingClassificationAccuracy'])
 
   # plot clustering accuracy
-  ax[2].set_title('Clustering accuracy rolling average')
+  ax[3].set_title('Clustering accuracy rolling average')
   if 'rollingClusteringAccuracy' in traces:
-    ax[2].plot(traces['rollingClusteringAccuracy'])
-
-  # highlight when the anomaly score is in a stable phase
-  # if 'clusteringConfidence' in traces:
-  #   confidence = traces['clusteringConfidence']
-  #   stableIntervals = constructStableIntervals(confidence)
-  #   for start, end in stableIntervals:
-  #     ax[2].axvspan(start, end, facecolor='g', alpha=0.4)
-
-  # plot anomaly score
-  ax[3].set_title(anomalyScoreType)
-  ax[3].plot(traces[anomalyScoreType])
+    ax[3].plot(traces['rollingClusteringAccuracy'])
 
   # plot clustering confidence
   ax[4].set_title('Clustering confidence')
   if 'clusteringConfidence' in traces:
     ax[4].plot(traces['clusteringConfidence'])
 
-  np.random.seed(21)
-  randomCellOrder = np.random.permutation(np.arange(numTmCells))
-
   if plotTemporalMemoryStates:
+    np.random.seed(21)
+    randomCellOrder = np.random.permutation(np.arange(numTmCells))
     for traceName in ['tmPredictedActiveCells',
                       'tmActiveCells']:
 
@@ -179,6 +169,7 @@ def plotTraces(xlim, traces, title, anomalyScoreType,
       ax[2].set_ylim([0, numTmCells])
       ax[2].set_xlabel('Time')
 
+  plt.show()
   plt.savefig(outputFile)
 
 
@@ -211,7 +202,7 @@ def saveTraces(traces, fileName):
 
 def loadTraces(fileName):
   """
-  Load netwrok traces from CSV
+  Load network traces from CSV
   :param fileName: (str) name of the file
   :return traces: (dict) network traces. E.g: activeCells, sensorValues, etc.
   """

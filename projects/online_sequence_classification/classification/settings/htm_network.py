@@ -27,8 +27,8 @@ INPUT_DIR = os.path.join(parentDir, 'data')
 OUTPUT_DIR = os.path.join(parentDir, 'results')
 RESULTS_OUTPUT_FILE = os.path.join(OUTPUT_DIR, 'seq_classification_results.csv')
 FILE_NAMES = [
-  'binary_ampl=10.0_mean=0.0_noise=0.0.csv',
-  'binary_ampl=10.0_mean=0.0_noise=1.0.csv',
+  #'binary_ampl=10.0_mean=0.0_noise=0.0.csv',
+  #'binary_ampl=10.0_mean=0.0_noise=1.0.csv',
   'sensortag_z.csv'
 ]
 INPUT_FILES = [os.path.join(INPUT_DIR, f) for f in FILE_NAMES]
@@ -43,7 +43,7 @@ HTM_NETWORK_CONFIGS = os.path.join(parentDir, 'htm_network_config',
 PLOT_RESULTS = False
 
 # Clustering params
-CLUSTERING = True
+CLUSTERING = False
 
 MERGE_THRESHOLD = 2.0
 ANOMALOUS_THRESHOLD = 0.3
@@ -55,4 +55,7 @@ CELLS_TO_CLUSTER = 'tmPredictedActiveCells'
 # Rolling average calculations
 ROLLING_ACCURACY_WINDOW = 10
 IGNORE_NOISE = False
+
+# Anomaly score
 ANOMALY_SCORE = 'rawAnomalyScore'
+

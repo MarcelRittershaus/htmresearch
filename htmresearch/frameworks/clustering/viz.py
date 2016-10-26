@@ -93,6 +93,8 @@ def vizInterSequenceClusters(traces, outputDir, cellsType, numCells, numClasses,
   SDRclusters = []
   clusterAssignments = []
   numRptsMin = np.min(numRptsPerCategory.values()).astype('int32')
+  last_c1 = None
+  last_c2 = None
   for rpt in range(numRptsMin + 1):
     idx0 = np.logical_and(np.array(traces['actualCategory']) == 0,
                           repetition == rpt)
@@ -123,8 +125,15 @@ def vizInterSequenceClusters(traces, outputDir, cellsType, numCells, numClasses,
       d02 = clusterDist(c0slice, c2slice, numCells)
       print '=> d(c0, c2): %s' % d02
 
-    d12 = clusterDist(c1slice, c2slice, numCells)
-    print '=> d(c1, c2): %s' % d12
+    if last_c1 and last_c2:
+      d12 = clusterDist(c1slice, c2slice, numCells)
+      d11 = clusterDist(c1slice, last_c1, numCells)
+      d22 = clusterDist(c2slice, last_c2, numCells)
+      print '=> d(c1, c2): %.4f | d(c1, c1): %.4f | d(c2, c2): %.4f' % (d12,
+                                                                        d11,
+                                                                        d22)
+    last_c1 = c1slice
+    last_c2 = c2slice
 
   npos, distanceMat = projectClusters2D(SDRclusters, numCells)
   title = 'Inter-sequence clusters in 2D (using %s)' % cellsType
@@ -132,4 +141,4 @@ def vizInterSequenceClusters(traces, outputDir, cellsType, numCells, numClasses,
   viz2DProjection(title, outputFile, numClasses, clusterAssignments, npos)
   title = 'Inter-sequence clusters distances (using %s)' % cellsType
   outputFile = '%s/%s' % (outputDir, title)
-  plotDistanceMat(distanceMat, title, outputFile)
+  plotDistanceMat(distanceMat, title, outputFile, showPlot=True)
