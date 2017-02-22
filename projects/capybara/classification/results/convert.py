@@ -1,15 +1,19 @@
-""" Just a quick formatting script """
+""" Just a quick formatting script to convert HTM traces. """
 import csv
+import os
 
-test_input = 'traces/trace_body_acc_x_inertial_signals_test.csv'
+if not os.path.exists('traces'):
+  os.makedirs('traces')
+
+test_input = '../../htm/backup/trace_body_acc_x_inertial_signals_test.csv'
 test_output = ('traces/test_body_acc_x_sp=True_tm=True_tp'
                '=False_SDRClassifier.csv')
 
-train_input = 'traces/trace_body_acc_x_inertial_signals_train.csv'
+train_input = '../../htm/backup/trace_body_acc_x_inertial_signals_train.csv'
 train_output = ('traces/train_body_acc_x_sp=True_tm=True_tp'
                 '=False_SDRClassifier.csv')
 
-max_rows = 40000
+MAX_OUTPUT_ROWS = 40000
 
 
 
@@ -31,5 +35,5 @@ def format_csv(input, output, max_rows):
 
 
 
-format_csv(train_input, train_output, max_rows)
-format_csv(test_input, test_output, max_rows)
+format_csv(train_input, train_output, MAX_OUTPUT_ROWS)
+format_csv(test_input, test_output, MAX_OUTPUT_ROWS)

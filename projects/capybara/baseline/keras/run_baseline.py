@@ -54,11 +54,11 @@ if __name__ == "__main__":
   valid_inputs = ['union', 'sdr', 'raw', 'dummy']
 
   parser = argparse.ArgumentParser()
-  parser.add_argument('--input', type=str, dest='input', required=True)
+  parser.add_argument('--input', type=str, dest='input', default='union')
   parser.add_argument('--train', dest='train', action='store_true',
-                      default=False)
+                      default=True)
   parser.add_argument('--plot', dest='plot', action='store_true',
-                      default=False)
+                      default=True)
   options = parser.parse_args()
   INPUT = options.input
   TRAIN = options.train
@@ -69,7 +69,7 @@ if __name__ == "__main__":
   print 'PLOT: %s' % PLOT
 
   signals = ['t', 'X', 'X_values', 'y', 'y_labels']
-  data = {'train': {}, 'val': {}, 'test': {}}
+  data = {'train': {}, 'test': {}}
   input_dim = None
   output_dim = None
   for phase, dataset in data.items():
@@ -136,7 +136,6 @@ if __name__ == "__main__":
     model = create_model(input_dim, output_dim, NUM_EPOCHS, VERBOSE)
 
     history = train(model, data['train']['X'], data['train']['y'],
-                    data['val']['X'], data['val']['y'],
                     BATCH_SIZE, NUM_EPOCHS, VERBOSE)
 
     plot_train_history(NUM_EPOCHS, history, INPUT)

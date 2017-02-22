@@ -150,12 +150,12 @@ def create_model(input_dim, output_dim, num_epochs, verbose):
 
 
 
-def train(model, X_train, y_train, X_val, y_val, batch_size, num_epochs,
+def train(model, X_train, y_train, batch_size, num_epochs,
           verbose):
   # The input data is shuffled at each epoch
   hist = model.fit(
     X_train, y_train,
-    validation_data=(X_val, y_val),
+    validation_split=0.2,
     batch_size=batch_size, nb_epoch=num_epochs, verbose=verbose)
   return hist.history
 
@@ -202,7 +202,8 @@ def load_traces(file_name, start=None, end=None):
   traces = dict()
   for column in df.columns.values:
     if column in ['tmPredictedActiveCells',
-                  'tpActiveCells',
+                  'spActiveColumns',
+                  'tmPredictiveCells',
                   'tmActiveCells']:
       traces[column] = df[column].apply(filter_sdr_columns).values
     else:
@@ -216,8 +217,8 @@ def load_sdrs(exp_name, start=None, end=None):
   file_name = get_file_name(exp_name, CONFIG)
   traces = load_traces(file_name, start, end)
 
-  sensor_values = traces['sensorValue']
-  categories = traces['actualCategory']
+  sensor_values = traces['scalarValue']
+  categories = traces['label']
   active_cells = traces['tmActiveCells']
   predicted_active_cells = traces['tmPredictedActiveCells']
 
@@ -254,6 +255,9 @@ def plot_data(X, y_labels, t, title):
   print('unique labels (%s): %s' % (title, unique_labels))
 
   colors = ['grey', 'blue', 'black', 'orange', 'yellow', 'pink']
+  while len(unique_labels) > len(colors):
+    colors += colors 
+  
   # Plot input data
   traces = []
   for label in unique_labels:
