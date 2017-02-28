@@ -217,8 +217,8 @@ def load_sdrs(exp_name, start=None, end=None):
   file_name = get_file_name(exp_name, CONFIG)
   traces = load_traces(file_name, start, end)
 
-  sensor_values = traces['scalarValue']
-  categories = traces['label']
+  sensor_values = traces['sensorValue']
+  categories = traces['actualCategory']
   active_cells = traces['tmActiveCells']
   predicted_active_cells = traces['tmPredictedActiveCells']
 

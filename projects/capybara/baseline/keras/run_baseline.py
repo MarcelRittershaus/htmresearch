@@ -43,7 +43,7 @@ BATCH_SIZE = 32  # 128
 NUM_EPOCHS = 200
 VERBOSE = 1
 VOTE_WINDOW = 125  # Needs to be an un-even number to break ties
-EXP_NAME = 'body_acc_x'
+EXP_NAME = 'body_acc_x_inertial_signals'
 
 if __name__ == "__main__":
   # Classification options.
@@ -74,7 +74,7 @@ if __name__ == "__main__":
   output_dim = None
   for phase, dataset in data.items():
     (sensor_values, sdrs, categories,
-     union) = load_sdrs('%s_%s' % (phase, EXP_NAME))
+     union) = load_sdrs('%s_%s' % (EXP_NAME, phase))
     t = np.arange(0, len(sensor_values))
     X_values = np.array([[s] for s in sensor_values])
     y_labels = np.array([int(c) for c in categories])
@@ -146,7 +146,6 @@ if __name__ == "__main__":
 
   # Plot data and results
   if PLOT:
-    phases_to_plot = ['train']
     for phase, d in data.items():
       plot_data(d['X_values'], d['y_labels'], d['t'],
                 '%s_%s' % (INPUT, phase))
@@ -186,7 +185,7 @@ if __name__ == "__main__":
       label_list = find_labels_used(d['y_labels'])
       label_list = [LABELS[l] for l in label_list]
 
-      # Plot confusion matrices
+      # Plot confusion matrix
       _ = plot_confusion_matrix(cnf_matrix,
                                 '%s_%s_cnf_matrix.png' % (INPUT, phase),
                                 classes=label_list,
